@@ -1,0 +1,85 @@
+{
+  "manifest_version": 3,
+  "name": "Chess Engine",
+  "version": "3.5.0",
+  "description": "Chess Engine #1 chess.com & lichess.org cheat",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Chess Engine",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "background": {
+    "scripts": [
+      "scripts/background.js",
+      "scripts/engine-host.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.chess.com/*",
+        "https://chess.com/*",
+        "https://lichess.org/*",
+        "https://*.lichess.org/*"
+      ],
+      "js": ["scripts/page-bridge.js"],
+      "world": "MAIN",
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://www.chess.com/*",
+        "https://chess.com/*",
+        "https://lichess.org/*",
+        "https://*.lichess.org/*"
+      ],
+      "js": [
+        "scripts/content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://www.chess.com/*",
+    "https://chess.com/*",
+    "https://lichess.org/*",
+    "https://*.lichess.org/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "scripts/page-bridge.js"
+      ],
+      "matches": [
+        "https://www.chess.com/*",
+        "https://chess.com/*",
+        "https://lichess.org/*",
+        "https://*.lichess.org/*"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "board-study-companion@local",
+      "strict_min_version": "128.0"
+    }
+  }
+}

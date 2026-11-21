@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">   
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chess Engine</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+    :root {
+      --bg: #1f1f1f;
+      --card: #1f1f1f;
+      --text: #e8eaed;
+      --muted: #9aa0a6;
+      --accent: #f28b82;
+      --ok: #20A74E;
+      --white: #F3F6FB;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      font-family: 'Onest', sans-serif;
+    }
+
+    .discord-icon{
+      font-size: 20px;
+      color: #F3F6FB;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      padding: 4px;
+      position:absolute;
+      bottom: 5px;
+      right: 10px;
+      filter:drop-shadow(#f3f6fb71 0px 0px 4px)
+    }
+
+    .discord-icon:hover{
+      transform: scale(1.1);
+    }
+
+    body {
+      width: 300px;
+      background: var(--bg);
+      color: var(--text);
+      font: 13px/1.45;
+      font-family: "Onest", sans-serif;
+      padding: 14px;
+      Background-image: linear-gradient(-45deg,  #1F0001, #090000);
+    }
+
+    h1 {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      min-width: 72px;
+    }
+    input[type="number"] {
+      width: 40px;
+      background: Transparent;
+      color: var(--text);
+      padding: 6px 8px;
+      font-size: 13px;
+      -webkit-appearance: none;border: 1px solid transparent;border-radius: 5px;box-shadow: none;outline: none;
+    }
+    input[type="number"]:focus { border-color: #F3F6FB; }
+    input[type="number"] {
+    -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      appearance: none;
+      margin: 0;
+    }
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      border: 1px solid var(--white);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    input[type="checkbox"]:checked {
+      background: #f28b82;
+      border-color: #f28b82;
+    }
+
+    input[type="checkbox"]:checked::after {
+      display: block;
+      color: var(--white);
+      font-size: 12px;
+      text-align: center;
+      line-height: 14px;
+  }
+
+    button {
+      flex: 1;
+      background: var(--card);
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      box-shadow: none;
+      outline: none;
+    }
+    button:hover { background: #2d3139; }
+    button.primary {
+      background: #005429;
+      border-color: #005429;
+    }
+    button.danger {
+      background: #5c2b2b;
+      border-color: #3b1c1c;
+    }
+    .card {
+      margin-top: 4px;
+      opacity: 100%;
+    }
+    .move {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+    .meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .status {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+    .status.on { color: var(--ok); }
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 12px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chess Engine</h1>
+  <div class="row">
+    <label for="depth">Depth</label>
+    <input type="number" id="depth" min="1" max="100" value="18" />
+  </div>
+  <div class="row">
+    <label for="hud">Ingame HUD</label>
+    <input type="checkbox" id="hud" checked />
+  </div>
+  <div class="row">
+    <label for="auto">Auto play</label>
+    <input type="checkbox" id="auto" />
+  </div>
+  <div class="row">
+    <button id="btnStart" class="primary">Start</button>
+    <button id="btnStop" class="danger">Stop</button>
+  </div>
+  <div class="card">
+    <div class="move" id="moveDisplay"><span style='color: #F3F6FB;'>—</span></div>
+    <div class="meta" id="metaDisplay">waiting</div>
+  </div>
+  <div class="status" id="statusLine">idle</div>
+  <p class="hint">works on both <b>chess.com</b> &amp; <b>lichess.org</b> in Chrome and Firefox btw<br>by qm80 btw</p>
+  
+  <div class="row">
+    <a href="https://discord.gg/uxHJZwstyJ"
+      class="discord-icon"
+      target="_blank"
+      rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
+            <path d="M19.27 5.33A18.5 18.5 0 0 0 14.7 3.9a.07.07 0 0 0-.07.03c-.2.36-.43.83-.59 1.2a17.1 17.1 0 0 0-5.08 0c-.16-.37-.4-.84-.6-1.2a.07.07 0 0 0-.07-.03 18.4 18.4 0 0 0-4.56 1.43.06.06 0 0 0-.03.02C.8 9.7.01 13.94.4 18.13a.08.08 0 0 0 .03.05 18.6 18.6 0 0 0 5.59 2.82.07.07 0 0 0 .08-.03c.43-.59.81-1.22 1.14-1.88a.07.07 0 0 0-.04-.1 12.2 12.2 0 0 1-1.75-.83.07.07 0 0 1-.01-.11l.35-.28a.07.07 0 0 1 .07-.01c3.67 1.68 7.65 1.68 11.28 0a.07.07 0 0 1 .07.01l.35.28a.07.07 0 0 1-.01.11c-.56.33-1.14.6-1.75.83a.07.07 0 0 0-.04.1c.33.66.71 1.29 1.14 1.88a.07.07 0 0 0 .08.03 18.5 18.5 0 0 0 5.59-2.82.07.07 0 0 0 .03-.05c.47-4.84-.79-9.04-3.31-12.78a.06.06 0 0 0-.03-.02ZM8.02 15.3c-1.1 0-2-1-2-2.23s.88-2.24 2-2.24 2.02 1.02 2 2.24c0 1.23-.88 2.23-2 2.23Zm7.96 0c-1.1 0-2-1-2-2.23s.88-2.24 2-2.24 2.02 1.02 2 2.24c0 1.23-.88 2.23-2 2.23Z"/>
+        </svg>
+    </a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
