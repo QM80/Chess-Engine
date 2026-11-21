@@ -22,5 +22,6 @@ It can play with a maximum depth of 100 and win almost 100% of the time against 
 - [x] -  Add auto play.
 - [x] -  Add a changeable depth.
 - [x] -  Add multi site support.
-- [x] -  Add a Live move capture. 
+- [x] -  Add a Live move capture.
+- [x] -  Add a hide square checkbox.
 - [ ] -  Add automatic pawn promotion. 
